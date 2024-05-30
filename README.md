@@ -14,3 +14,10 @@ Web <- scrape web - RecursiveUrlloader((langchain) -> scraped documents -> Recur
 ![image](./dataquery.png) 
 * Semantic Search Vector Database: semantically search through the vector database and find out the most relevant content to the user's query
 * Save Query and Response in MongoDB Chat History: to manage conversational memory, the history data is essential in shaping future interactions
+## Implementation
+### Configurations
+in the [config.py](./config.py) file are some configurations which are reas through environment variables
+### HTTP AI 
+HTTP API is carried ou in [api.py](./api.py). This API includes an HTTP POST endpoint '''api/question''', which accepts a JSON objact containing a question and user_id
+### Model
+includes scraping data from website and creating vector store in ```init_index()``` and available the Llama3 LLM through the Ollama's model REST API ```<host>_11434``` in function ```init_conversation```. The ```chat``` function is responsible for posting questions to LLM.
