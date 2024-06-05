@@ -1,4 +1,5 @@
 # local ChatBot
+based on [link](https://medium.com/rahasak/session-based-chatbot-for-website-content-utilizing-openai-gpt-4-llm-langchain-ef09e0706767)
 To run the large language model with more privacy, no leaky of personal data, download the llm and run it locally.
 ## Ollama
 a lightweight and flexible framework for local deployment of LLM. Provide a collection of pre-configured models. it quantize the neural network to make it applicable for personal computers
