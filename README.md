@@ -22,3 +22,18 @@ in the [config.py](./config.py) file are some configurations which are reas thro
 HTTP API is carried ou in [api.py](./api.py). This API includes an HTTP POST endpoint '''api/question''', which accepts a JSON objact containing a question and user_id
 ### Model
 includes scraping data from website and creating vector store in ```init_index()``` and available the Llama3 LLM through the Ollama's model REST API ```<host>_11434``` in function ```init_conversation```. The ```chat``` function is responsible for posting questions to LLM.
+## Fine-Tuning
+Fine-Tuning is a machine learning process where a pre-trained model is further trained on a specific task or dataset to adapt it to a particular use case. 
++ Take a pre-trained model
++ Training on a smaller, task-specific dataset
++ Adjusting the pre-trained weights
+### LoRA(Low-Rank Adaptation)
+LoRA is introduced to address the high computational cost and memory requirements typically associated with Fine-Tuning large models. Achieving by adapting only a small subset of the model's parameters, rather than Fine-Tuning all parameters.
+
+**How**
++ Instead of updating a large matrix directly, it uses two smaller matrices, which means: the weight matrix $N x M$ &rarr; $N x K$ & $K x M$ where $K$ is usually small.
+
+**QLoRA**: Q stands for quantization i.e. the process of reducing the precision of numerical representations of weights, activations or data
+
+**Methods used**
++ PEFT(Parameter-Efficient Fine-Tuning), integrated with Transformers for easy model training and inference.
