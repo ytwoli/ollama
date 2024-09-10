@@ -19,9 +19,57 @@ Web <- scrape web - RecursiveUrlloader((langchain) -> scraped documents -> Recur
 ### Configurations
 in the [config.py](./config.py) file are some configurations which are reas through environment variables
 ### HTTP AI 
-HTTP API is carried ou in [api.py](./api.py). This API includes an HTTP POST endpoint '''api/question''', which accepts a JSON objact containing a question and user_id
+HTTP API is carried ou in [api.py](./api.py). This API includes an HTTP POST endpoint ```api/question```, which accepts a JSON objact containing a question and user_id
 ### Model
 includes scraping data from website and creating vector store in ```init_index()``` and available the Llama3 LLM through the Ollama's model REST API ```<host>_11434``` in function ```init_conversation```. The ```chat``` function is responsible for posting questions to LLM.
+#### Auto Classes
+Hugging Face provides a wide range of Auto Classes that are designed to automatically load the correct model architecture for a specific task based on the model type. 
+```AutoModel```:
++ **Purpose**: Loads the base transformer model without any task-specific heads.
++ **Use Case**:  If only want to use the base model for extracting embeddings, use this class.
++ **Example**:
+    ```
+    from transformers import AutoModel, AutoTokenizer
+    
+    model_name = "bert-base-uncased"
+    model = AutoModel.from_pretrained(model_name)
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    ```
+
+```AutoModelForCausalLM```:
++ **Purpose**: Loads a model for causal language modeling (autoregressive text generation).
++ **Use Cases**: This is useful for text generation tasks where you need to predict the next word in a sequence, such as chatbots, text generation, or language modeling.
+
+```ÀutoModelForSeq2SeqLM```:
++ **Purpose**: Loads a model for sequence-to-sequence tasks, such as translation or summarization.
++ **Use Cases**: Translation and Summarization
+
+
+```ÀutoModelForQuestionAnswering```:
++ **Purpose**: Loads a model specifically for question answering tasks, where the model predicts the start and end positions of the answer in a context.
++ **Use Cases**: This is used for extractive question answering tasks where a question is asked and the model needs to extract the answer from a given context.
++  **Example**:
+    ```
+    from transformers import AutoModelForQuestionAnswering, AutoTokenizer
+    model_name = "bert-large-uncased-whole-word-masking-finetuned-squad"
+    model = AutoModelForQuestionAnswering.from_pretrained(model_name)
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    inputs = tokenizer(question, context, return_tensors='pt')
+    outputs = model(**inputs)
+    
+    # Get the logits for the start and end positions
+    start_logits = outputs.start_logits
+    end_logits = outputs.end_logits
+    
+    # Find the token with the highest score for the start and end positions
+    answer_start = start_logits.argmax()
+    answer_end = end_logits.argmax()
+    
+    answer = inputs["input_ids"][0][answer_start:answer_end+1]
+    print(tokenizer.decode(answer))
+    ```
+#### vLLM
+vLLM is an open-source project taht allows people to do LLM inference and serving. This means that you can download model weights and pass them to vllm to perform inference via API
 ## Fine-Tuning
 Fine-Tuning is a machine learning process where a pre-trained model is further trained on a specific task or dataset to adapt it to a particular use case. 
 + Take a pre-trained model
