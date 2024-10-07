@@ -16,12 +16,15 @@ Web <- scrape web - RecursiveUrlloader((langchain) -> scraped documents -> Recur
 ![image](./dataquery.png) 
 * Semantic Search Vector Database: semantically search through the vector database and find out the most relevant content to the user's query
 * Save Query and Response in MongoDB Chat History: to manage conversational memory, the history data is essential in shaping future interactions
-### Complex PDF (LlamaParse)
+### Complex PDF 
+#### LlamaParse (Cloud-Dependent)
 LlamaParse is designed for complex documents which contains figures and tables. Llamaparse does its work by extracting data from these documents and transforming them into easily ingestible formats such as markdown or text. 
 + **Supported file types**: PDF, .pptx, .docx, .rtf, .pages, .epub, etc...
 + **Transformed output types**: Markdown, text.
 + **Extraction Capabilities**: Text, tables, images, graphs, comic books, mathematics equations
-
+#### PyMuPDF
+PyMuPDF can extract both text and images and embedded objects from PDFs
+#### ThePipe
 ## Implementation
 ### Configurations
 in the [config.py](./config.py) file are some configurations which are reas through environment variables
