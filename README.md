@@ -17,20 +17,23 @@ Web <- scrape web - RecursiveUrlloader((langchain) -> scraped documents -> Recur
 * Semantic Search Vector Database: semantically search through the vector database and find out the most relevant content to the user's query
 * Save Query and Response in MongoDB Chat History: to manage conversational memory, the history data is essential in shaping future interactions
 ### Complex PDF 
-#### LlamaParse (Cloud-Dependent)
+#### PDF Processing
+The first thing to create a multimodel retriver is to separate the pdf into 'text', 'images' and 'tables'.
+##### LlamaParse (Cloud-Dependent)
 LlamaParse is designed for complex documents which contains figures and tables. Llamaparse does its work by extracting data from these documents and transforming them into easily ingestible formats such as markdown or text. 
 + **Supported file types**: PDF, .pptx, .docx, .rtf, .pages, .epub, etc...
 + **Transformed output types**: Markdown, text.
 + **Extraction Capabilities**: Text, tables, images, graphs, comic books, mathematics equations
-#### PyMuPDF
-PyMuPDF can extract both text and images and embedded objects from PDFs
-#### ThePipe
+##### Unstructured
+Specialiting in extracting and transforming complex data from different formats. It transforms information in the documment into AI-friendly JSON files.
+#### Image Processing
++ **Llava** 
 ## Implementation
 ### Configurations
 in the [config.py](./config.py) file are some configurations which are reas through environment variables
 ### HTTP AI 
 HTTP API is carried ou in [api.py](./api.py). This API includes an HTTP POST endpoint ```api/question```, which accepts a JSON objact containing a question and user_id
-### Model
+### Models
 includes scraping data from website and creating vector store in ```init_index()``` and available the Llama3 LLM through the Ollama's model REST API ```<host>_11434``` in function ```init_conversation```. The ```chat``` function is responsible for posting questions to LLM.
 #### Auto Classes
 Hugging Face provides a wide range of Auto Classes that are designed to automatically load the correct model architecture for a specific task based on the model type. 
@@ -95,3 +98,12 @@ LoRA is introduced to address the high computational cost and memory requirement
 
 **Methods used**
 + PEFT(Parameter-Efficient Fine-Tuning), integrated with Transformers for easy model training and inference.
+
+### Reinforcement
+Reinforcement learning (RL) is a popular method to enhance the capabilities of large language models (LLMs).
+
+**Process**
++ The model generates responses to a prompt, which are then evaluated by a human or another model.
++ A reward function assigns a score to the response (positive for desirable behavior, negative for undesirable).
++ The model learns to improve its responses over time by maximizing cumulative rewards, ideally producing answers that align better with human preferences or specific performance goals.
+
