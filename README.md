@@ -3,7 +3,7 @@ based on [link](https://medium.com/rahasak/session-based-chatbot-for-website-con
 To run the large language model with more privacy, no leaky of personal data, download the llm and run it locally.
 ## Ollama
 a lightweight and flexible framework for local deployment of LLM. Provide a collection of pre-configured models. it quantize the neural network to make it applicable for personal computers
-## RAG
+## RAG(Retrieval Augmented Generation)
 incorporates a custom-made dataset, can also dynamically scraped from an online website, user interacte with website's date through API. Document -> scrap -> split -> store in Chorma vector database as vector embeddings
 ### Web-Scrabble
 #### Data Indexing
@@ -81,6 +81,17 @@ Hugging Face provides a wide range of Auto Classes that are designed to automati
     answer = inputs["input_ids"][0][answer_start:answer_end+1]
     print(tokenizer.decode(answer))
     ```
+#### Quantization
+Quantization is a model compression technique that reduces the size and memory footprint of the LLM, making it more efficient to deploy and run on resource-constrained devices. It involves reducing the precision of the model's weights and activations, typically from 32-bit floating-point to 8-bit or lower, without significantly impacting the model's performance.
+```
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_use_double_quant=True,  # Use double quantization to reduce memory usage
+    bnb_4bit_quant_type='nf4', # Use NF4 (Normal Float 4-bit) quantization
+    bnb_4bit_compute_dtype=torch.bfloat16  #  Use bfloat16 for computation to save memory
+)
+model = AutoModelForCausalLM.from_pretrained(model_name, device_map='auto', quantization_config=bnb_config)
+```
 #### vLLM
 vLLM is an open-source project taht allows people to do LLM inference and serving. This means that you can download model weights and pass them to vllm to perform inference via API
 ## Fine-Tuning
@@ -88,22 +99,44 @@ Fine-Tuning is a machine learning process where a pre-trained model is further t
 + Take a pre-trained model
 + Training on a smaller, task-specific dataset
 + Adjusting the pre-trained weights
-### LoRA(Low-Rank Adaptation)
-LoRA is introduced to address the high computational cost and memory requirements typically associated with Fine-Tuning large models. Achieving by adapting only a small subset of the model's parameters, rather than Fine-Tuning all parameters.
 
-**How**
+
+### PEFT(Parameter-Efficient Fine-Tuning)
+PEFT optimizes fine-tuning by updating only a small subset of model parameters. Since full fine-tuning needs to update all model parameters during supervised learning, so it may has several challenges like **Memory-Intensive Requirements**, **Catastrophic Forgetting**(forget previouse knowledge when having a new task), **Storage and Computational Costs**. In order to avoid the above problems, PEFT seeks to update only a small subset of the model parameters, making the fine-tuning processe more manageable. 
+#### LoRA(Low-Rank Adaptation)
+LoRA is a powerful PEFT technique which is introduced to address the high computational cost and memory requirements typically associated with Fine-Tuning large models. Achieving by adapting only a small subset of the model's parameters, rather than Fine-Tuning all parameters.
+
+**Main Concept**
 + Instead of updating a large matrix directly, it uses two smaller matrices, which means: the weight matrix $N x M$ &rarr; $N x K$ & $K x M$ where $K$ is usually small.
++ For smaller models, LoRA may not increase the model performance outstandingly, but its effectiveness increases as model size grows.
++ ```
+  
+lora_config = LoraConfig(
+    r=8,  # Rank of the low-rank matrices
+    lora_alpha=32,  # Scale factor for the low-rank matrices
+    target_modules=['query_key_value'],  # Modules to apply LoRA to
+    lora_dropout=0.1,  # Dropout rate for the low-rank matrices
+    bias='none',  # Bias mode ('none', 'all', 'lora')
+    task_type='CAUSAL_LM'  # Task type ('CAUSAL_LM', 'SEQ_2_SEQ_LM', 'TOKEN_CLASSIFICATION', 'QUESTION_ANSWERING')
+)
+peft_model = get_peft_model(original_model, 
+                            lora_config)
+```
 
-**QLoRA**: Q stands for quantization i.e. the process of reducing the precision of numerical representations of weights, activations or data
+**QLoRA**: Q stands for quantization i.e. the process of reducing the precision of numerical representations of weights, activations or data, so QLoRA stands basically for LoRA over quantized LLM, i.e. LLM loaded using a lower precision datatype in the memory.
 
-**Methods used**
-+ PEFT(Parameter-Efficient Fine-Tuning), integrated with Transformers for easy model training and inference.
+#### Prompt Tuning
 
 ### Reinforcement
 Reinforcement learning (RL) is a popular method to enhance the capabilities of large language models (LLMs).
 
 **Process**
 + The model generates responses to a prompt, which are then evaluated by a human or another model.
-+ A reward function assigns a score to the response (positive for desirable behavior, negative for undesirable).
-+ The model learns to improve its responses over time by maximizing cumulative rewards, ideally producing answers that align better with human preferences or specific performance goals.
++ A reward function is trained with supervised learning (a data set with scores to the response (positive for desirable behavior, negative for undesirable)).
++ Use reward learning in the reinforcement learning loop to fine-tuning the base LLM. 
+
+**Reward Model**
++ Reward model provides feedback to LLMs to help them understand which answer is expected and which are not.
++ It takes (prompt, response) pair as input and outputs a reward/score as output and this process can be formulated as a simple regression or classification task.
++ Common Approach: TRL Custom Reward Modeling 
 
