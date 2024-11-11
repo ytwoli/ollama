@@ -110,18 +110,14 @@ LoRA is a powerful PEFT technique which is introduced to address the high comput
 + Instead of updating a large matrix directly, it uses two smaller matrices, which means: the weight matrix $N x M$ &rarr; $N x K$ & $K x M$ where $K$ is usually small.
 + For smaller models, LoRA may not increase the model performance outstandingly, but its effectiveness increases as model size grows.
 + ```
-  
-lora_config = LoraConfig(
+  lora_config = LoraConfig(
     r=8,  # Rank of the low-rank matrices
     lora_alpha=32,  # Scale factor for the low-rank matrices
     target_modules=['query_key_value'],  # Modules to apply LoRA to
     lora_dropout=0.1,  # Dropout rate for the low-rank matrices
     bias='none',  # Bias mode ('none', 'all', 'lora')
-    task_type='CAUSAL_LM'  # Task type ('CAUSAL_LM', 'SEQ_2_SEQ_LM', 'TOKEN_CLASSIFICATION', 'QUESTION_ANSWERING')
-)
-peft_model = get_peft_model(original_model, 
-                            lora_config)
-```
+    task_type='CAUSAL_LM'  # Task type ('CAUSAL_LM', 'SEQ_2_SEQ_LM', 'TOKEN_CLASSIFICATION', 'QUESTION_ANSWERING'))
+  peft_model = get_peft_model(original_model, lora_config) 
 
 **QLoRA**: Q stands for quantization i.e. the process of reducing the precision of numerical representations of weights, activations or data, so QLoRA stands basically for LoRA over quantized LLM, i.e. LLM loaded using a lower precision datatype in the memory.
 
