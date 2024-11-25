@@ -181,7 +181,8 @@ Reinforcement learning (RL) is a popular method to enhance the capabilities of l
 + The model generates responses to a prompt, which are then evaluated by a human or another model.
 + A reward function is trained with supervised learning (a data set with scores to the response (positive for desirable behavior, negative for undesirable)).
 + Use reward learning in the reinforcement learning loop to fine-tuning the base LLM. 
-
+**PPO(Proximal Policy Optimization)**
+  
 **Reward Model**
 + Reward model provides feedback to LLMs to help them understand which answer is expected and which are not.
 + It takes (prompt, response) pair as input and outputs a reward/score as output and this process can be formulated as a simple regression or classification task.
