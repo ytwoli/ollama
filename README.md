@@ -102,6 +102,29 @@ ONNX is an open format designed for model interoperability and optimized inferen
     * ONNX models often achieve lower latency and faster execution compared to their original framework, especially on CPUs.
 + Hardware Support: Supports CPUs, GPUs, FPGAs, and specialized accelerators (e.g., NVIDIA TensorRT, Intel OpenVINO).
 + Comptibility: ONNX is supported by major deep learning libraries and tools, enabling seamless integration into workflows.
+
+**Workflow**:
+```
+# a simple input for the model, so the input can go through the model, and then with the trace from PyTorch the corresponding graph will be stored as ONNX model
+x = torch.randn(1, 3, 256, 256) 
+ 
+with torch.no_grad(): 
+    torch.onnx.export( 
+        model, 
+        x, 
+        "srcnn.onnx", 
+        opset_version=11, 
+        input_names=['input'], 
+        output_names=['output'])
+
+# Load the model
+onnx_model = onnx.load('srcnn.onnx')
+# check if the model file is correct
+try:
+    onnx.checker.check_model(onnx_mode)
+except Exception:
+    print('Model incorrect')
+```
 #### ONNX Runtime
 ONNX Runtime is a high-performance inference engine for ONNX models. It is optimized for speed and efficiency, making it ideal for deploying machine learning models in production.
 
@@ -114,16 +137,11 @@ ONNX Runtime is a high-performance inference engine for ONNX models. It is optim
 + Prebuild packages
 
 **Workflow**:
-+ *Load Model*
 ```
 import onnxruntime as ort
-seddion = ort.InferenceSession("model.onnx")
-```
-+ *Prepare Inputs*: Format input data as expected by the model
-
-+ *Run Inference*
-```
-outputs = session.run(None, {"input_name": input_data})  
+seddion = ort.InferenceSession("srcnn.onnx")
+ort_inputs = {'input': input}
+ort_outputs = session.run(['output'],ort_inputs)[0]  
 ```
 ## Fine-Tuning
 Fine-Tuning is a machine learning process where a pre-trained model is further trained on a specific task or dataset to adapt it to a particular use case. 
