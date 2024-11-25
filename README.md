@@ -103,6 +103,28 @@ ONNX is an open format designed for model interoperability and optimized inferen
 + Hardware Support: Supports CPUs, GPUs, FPGAs, and specialized accelerators (e.g., NVIDIA TensorRT, Intel OpenVINO).
 + Comptibility: ONNX is supported by major deep learning libraries and tools, enabling seamless integration into workflows.
 #### ONNX Runtime
+ONNX Runtime is a high-performance inference engine for ONNX models. It is optimized for speed and efficiency, making it ideal for deploying machine learning models in production.
+
+**Key Features**:
++ Cross-Platform Support
++ Performance Optimizations: Uses graph optimizations, such as constant folding and operator fusion, to accelerate inference.
++ Scalability: Designed to handle models from simple linear regression to complex deep learning architectures.
++ Interoperability
++ Extensibility
++ Prebuild packages
+
+**Workflow**:
++ *Load Model*
+```
+import onnxruntime as ort
+seddion = ort.InferenceSession("model.onnx")
+```
++ *Prepare Inputs*: Format input data as expected by the model
+
++ *Run Inference*
+```
+outputs = session.run(None, {"input_name": input_data})  
+```
 ## Fine-Tuning
 Fine-Tuning is a machine learning process where a pre-trained model is further trained on a specific task or dataset to adapt it to a particular use case. 
 + Take a pre-trained model
