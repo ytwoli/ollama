@@ -33,9 +33,9 @@ Specialiting in extracting and transforming complex data from different formats.
 in the [config.py](./config.py) file are some configurations which are reas through environment variables
 ### HTTP AI 
 HTTP API is carried ou in [api.py](./api.py). This API includes an HTTP POST endpoint ```api/question```, which accepts a JSON objact containing a question and user_id
-### Models
+## Models
 includes scraping data from website and creating vector store in ```init_index()``` and available the Llama3 LLM through the Ollama's model REST API ```<host>_11434``` in function ```init_conversation```. The ```chat``` function is responsible for posting questions to LLM.
-#### Auto Classes
+### Auto Classes
 Hugging Face provides a wide range of Auto Classes that are designed to automatically load the correct model architecture for a specific task based on the model type. 
 ```AutoModel```:
 + **Purpose**: Loads the base transformer model without any task-specific heads.
@@ -81,7 +81,7 @@ Hugging Face provides a wide range of Auto Classes that are designed to automati
     answer = inputs["input_ids"][0][answer_start:answer_end+1]
     print(tokenizer.decode(answer))
     ```
-#### Quantization
+### Quantization
 Quantization is a model compression technique that reduces the size and memory footprint of the LLM, making it more efficient to deploy and run on resource-constrained devices. It involves reducing the precision of the model's weights and activations, typically from 32-bit floating-point to 8-bit or lower, without significantly impacting the model's performance.
 ```
 bnb_config = BitsAndBytesConfig(
@@ -92,14 +92,25 @@ bnb_config = BitsAndBytesConfig(
 )
 model = AutoModelForCausalLM.from_pretrained(model_name, device_map='auto', quantization_config=bnb_config)
 ```
-#### vLLM
-vLLM is an open-source project taht allows people to do LLM inference and serving. This means that you can download model weights and pass them to vllm to perform inference via API
+### ONNX(Open Neural Network Exchange)
+ONNX is an open format designed for model interoperability and optimized inference across various frameworks and hardware platforms. It allows models trained in one framework (like PyTorch or TensorFlow) to be exported and run in an efficient, hardware-agnostic way using highly optimized runtimes.
+
+**Key Features**:
++ Interoperability: Models trained in frameworks like PyTorch, TensorFlow, or Keras can be converted to ONNX format and deployed with ONNX-compatible runtimes.
++ Optimized Inferences:
+    * ONNX runtimes, like ONNX Runtime or TensorRT, optimize computations for specific hardware (e.g., CPUs, GPUs, TPUs).
+    * ONNX models often achieve lower latency and faster execution compared to their original framework, especially on CPUs.
++ Hardware Support: Supports CPUs, GPUs, FPGAs, and specialized accelerators (e.g., NVIDIA TensorRT, Intel OpenVINO).
++ Comptibility: ONNX is supported by major deep learning libraries and tools, enabling seamless integration into workflows.
+#### ONNX Runtime
 ## Fine-Tuning
 Fine-Tuning is a machine learning process where a pre-trained model is further trained on a specific task or dataset to adapt it to a particular use case. 
 + Take a pre-trained model
 + Training on a smaller, task-specific dataset
 + Adjusting the pre-trained weights
 
+### vLLM
+vLLM is an open-source project taht allows people to do LLM inference and serving. This means that you can download model weights and pass them to vllm to perform inference via API
 
 ### PEFT(Parameter-Efficient Fine-Tuning)
 PEFT optimizes fine-tuning by updating only a small subset of model parameters. Since full fine-tuning needs to update all model parameters during supervised learning, so it may has several challenges like **Memory-Intensive Requirements**, **Catastrophic Forgetting**(forget previouse knowledge when having a new task), **Storage and Computational Costs**. In order to avoid the above problems, PEFT seeks to update only a small subset of the model parameters, making the fine-tuning processe more manageable. 
