@@ -24,8 +24,16 @@ LlamaParse is designed for complex documents which contains figures and tables. 
 + **Supported file types**: PDF, .pptx, .docx, .rtf, .pages, .epub, etc...
 + **Transformed output types**: Markdown, text.
 + **Extraction Capabilities**: Text, tables, images, graphs, comic books, mathematics equations
-##### Unstructured
-Specialiting in extracting and transforming complex data from different formats. It transforms information in the documment into AI-friendly JSON files.
+##### Unstructured.io
+Specialiting in extracting and transforming complex data from different formats. It transforms information in the documment into AI-friendly JSON files. For example in PDFs, it can partitial the documents based on their content types, like header, image, list and table, and chunk by their titles. 
+
+**Process:**
+    + **Partition**: Extracts content from raw files and outputs that content as structured document elements. 
+    + **Chunking**: After partition, chunking can rearrange the documents into some smaller size 'chunks', so that the limitation of embedding models can be fulfilled and the precision is improved. By chunking, UNSTRUCTURED offers by-title, by-page and by-similarity strategies, so that people can get more control of chunking phrase. After chunking, it willget document elements with types like: ```CompositeElement```(all text elements will become a ```CompositeElement``` after chunking), ```Table```(not combined with other elements) and ```TbaleChunk```(Large tables will be split according to the *Max Characters*)
+    + **Enriching**: Enriching enhances the data via summarizing images and tables, representing table in HTML markup format and Named Entity Recognition(NER).
+    + **Embedding**: Create a vector database which can be used in similarity search.
+
+
 #### Image Processing
 + **Llava** 
 ## Implementation
