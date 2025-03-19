@@ -35,7 +35,10 @@ Specialiting in extracting and transforming complex data from different formats.
 
 
 #### Image Processing
-+ **Llava** 
++ **Llava**
+
+### Indexing
+Indexing is a process in RAG, which can organize a large amount of data with efficient outlines so that the retrieval process can be quick and precise.  
 ## Implementation
 ### Configurations
 in the [config.py](./config.py) file are some configurations which are reas through environment variables
