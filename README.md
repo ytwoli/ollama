@@ -42,7 +42,7 @@ Indexing is a process in RAG, which can organize a large amount of data with eff
 + **TF-IDF(Term Frequency-Inverse Document Frequency)**: it will down weight some certain terns before embedding
 + **Adjust Query Embeddings**: modify the query embeddings to reduce the weight of certain terms when retrieval
 
-### Reranking
+### Reranking\
 ![reranking](reranking.jpg)
 Reranking is considered to be a further enhancement for retrieval processes. It aims to refine the initial search result like a quality control mechanism. With the top k results from refined list, the LLM can generate a more accurate answer.
 #### Techniques
