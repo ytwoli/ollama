@@ -38,7 +38,35 @@ Specialiting in extracting and transforming complex data from different formats.
 + **Llava**
 
 ### Indexing
-Indexing is a process in RAG, which can organize a large amount of data with efficient outlines so that the retrieval process can be quick and precise. e.g. When storing vector data in Chromadb, it uses HNSW Lib or indexing and searching vectors. 
+Indexing is a process in RAG, which can organize a large amount of data with efficient outlines so that the retrieval process can be quick and precise. e.g. When storing vector data in Chromadb, it uses HNSW Lib or indexing and searching vectors. But it has some problems with the auto-calculated indexing. Since the similarity search will at first compare the question with the indexing, which can accelerate the retrieval process. But in other hands, it could put too much weight on for example product names, like SIMOCODE. There are two approaches for this problem:
++ **TF-IDF(Term Frequency-Inverse Document Frequency)**: it will down weight some certain terns before embedding
++ **Adjust Query Embeddings**: modify the query embeddings to reduce the weight of certain terms when retrieval
+
+### Reranking
+![reranking](rerank.jpg)
+Reranking is considered to be a further enhancement for retrieval processes. It aims to refine the initial search result like a quality control mechanism. With the top k results from refined list, the LLM can generate a more accurate answer.
+#### Techniques
+1. **Traditional Ranking Models**
+    + BM25 and TF-IDF: These are classical information retrieval algorithms that score documents based on keyword matching and term frequency. While often used for initial retrieval, they can also be applied for reranking by recalculating scores for the retrieved set.
+2. **Learning to Rank (LTR) Models**\
+    LTR models leverage machine learning to improve ranking based on training data. They can be categorized into:
+
+    + Pointwise Approaches: Predict relevance scores independently for each document (e.g., regression or classification models).
+    
+    + Pairwise Approaches: Learn from pairs of documents, optimizing the model to correctly rank one document over another (e.g., RankNet, LambdaRank).
+    
+    + Listwise Approaches: Consider the entire list of documents during training to directly optimize ranking metrics like NDCG (e.g., ListNet, LambdaMART).
+
+3. **Neural Ranking Models**
+    + Bi-Encoders: Encode queries and documents separately and compute similarity in the embedding space. Example libraries include SentenceTransformers.
+    
+    + Cross-Encoders: Input concatenated query-document pairs into transformer models (like BERT) to capture fine-grained interactions. Although computationally intensive, they usually provide better performance.
+        ```
+        from sentence_transformers import CrossEncoder
+        
+        model = CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2')
+        scores = model.predict([("query", "document") for document in documents])
+        ```
 ## Implementation
 ### Configurations
 in the [config.py](./config.py) file are some configurations which are reas through environment variables
