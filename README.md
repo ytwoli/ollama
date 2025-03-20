@@ -43,7 +43,7 @@ Indexing is a process in RAG, which can organize a large amount of data with eff
 + **Adjust Query Embeddings**: modify the query embeddings to reduce the weight of certain terms when retrieval
 
 ### Reranking
-![reranking](rerank.jpg)
+[reranking](reranking.jpg)
 Reranking is considered to be a further enhancement for retrieval processes. It aims to refine the initial search result like a quality control mechanism. With the top k results from refined list, the LLM can generate a more accurate answer.
 #### Techniques
 1. **Traditional Ranking Models**
